@@ -1,0 +1,21 @@
+{
+    "username": "ARKOFDAN",
+    "collections": "collections/",
+    "temp": "temp/",
+    "images":{
+        "temporal_folder": "images/",
+        "images_extension": "jpg",
+        "images_attribute": "image",
+        "images_name": "objectid"
+    },
+    "filters":{
+        "own": 1
+    },
+    "canvas":{
+        "writeUsername": true,
+        "w": 250,
+        "h": 250,
+        "backgroundColor": "white",
+        "destination": "result/"
+    }
+}

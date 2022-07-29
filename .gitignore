@@ -1,0 +1,10 @@
+*.jpg
+collections/*.json
+temp/*
+result/*.png
+*.png
+node_modules
+node_modules/
+/node_modules
+/node_modules/
+node_modules/*
