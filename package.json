@@ -2,6 +2,7 @@
   "dependencies": {
     "bgg-xml-api-client": "^0.1.10",
     "canvas": "^2.9.3",
-    "fs-extra": "^10.1.0"
+    "fs-extra": "^10.1.0",
+    "open": "^8.4.0"
   }
 }

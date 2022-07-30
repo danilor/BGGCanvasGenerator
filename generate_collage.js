@@ -147,8 +147,6 @@ async function createCanvas(items) {
     ctx.fillStyle = config.canvas.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-
-
     /**
      * Lets load all images
      */
@@ -157,9 +155,79 @@ async function createCanvas(items) {
         for (let cols = 0; cols < grouped[rows].length; cols++) {
             Console.log('Loading image: ' + grouped[rows][cols]);
             const image = await loadImage(config.images.temporal_folder + grouped[rows][cols]);
+            
+            /**
+             * Now, if the square option is enabled, we need to square the images
+             */
+
+            let auxCanvas = null;
+            /**
+             * If crop square is true, instead of streaching the images
+             * we need to crop them down
+             */
+            if( config.canvas.cropSquare === true){
+                Console.log('Squaring image');
+                const maxSize = ( image.height > image.width ? image.height : image.width );
+                const minSize = ( image.height > image.width ? image.width : image.height );
+                auxCanvas = createCanvas(minSize, minSize); // This is the exact same size of the image we want to add
+                const auxContext = auxCanvas.getContext('2d');
+
+                /**
+                 * Now the crop needs to be done depending on the option selected.
+                 * Available options:
+                 *  - top-left
+                 *  -center
+                 */
+
+                switch(config.canvas.cropType){
+                    case 'top-left':
+                        Console.log('Cropping image Top Left');
+                        await auxContext.drawImage(
+                            image, 
+                            0, 0, 
+                            image.width, image.height
+                        );
+                    break;
+                    case 'center':
+                        Console.log('Cropping image center');
+                        Console.log('Min Size: ' + minSize);
+                        const leftAux = image.width - minSize;
+                        const topAux = image.height - minSize;
+
+                        let left = 0;
+                        let top = 0;
+
+                        if( leftAux !== 0 ){
+                            left = -1 * Math.round(leftAux / 2);
+                        }
+                        if( topAux !== 0 ){
+                            top = -1 * Math.round(topAux / 2);
+                        }
+
+                        Console.log('Image Information');
+                        Console.log('W: ' + image.width);
+                        Console.log('H:' + image.height);
+                        Console.log('Provided Top: ' + top);
+                        Console.log('Provided Left: ' + left);
+                        await auxContext.drawImage(
+                            image, 
+                            left, top, 
+                            image.width, image.height
+                        );
+                    break;
+                }
+
+            }else{
+                auxCanvas = image;
+            }
             const posX = cols * config.canvas.w;
             const posY = rows * config.canvas.h;
-            await ctx.drawImage(image, posX, posY, config.canvas.w, config.canvas.h);
+            await ctx.drawImage(
+                auxCanvas, 
+                posX, posY, 
+                config.canvas.w, config.canvas.h
+            );
+            Console.space();
         }
     }
 
@@ -189,8 +257,16 @@ async function createCanvas(items) {
 
     Console.log('Writing the resulting image');
     const buffer = await canvas.toBuffer("image/png");
-    await fs.writeFileSync(config.canvas.destination+config.username+".png", buffer);
+    const fileDesination = config.canvas.destination+config.username+".png";
+    await fs.writeFileSync(fileDesination, buffer);
 
+    /**
+     * If the open result option is true, then we open the resulting image
+     */
+    if(config.openResult === true){
+        const open = require('open');
+        await open(fileDesination);
+    }
 }
 
 /**
