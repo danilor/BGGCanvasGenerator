@@ -18,7 +18,7 @@
         "h": 500,
         "backgroundColor": "white",
         "destination": "result/",
-        "cropSquare": true,
+        "cropSquare": false,
         "cropType": "center"
     }
 }
