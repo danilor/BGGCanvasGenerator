@@ -259,7 +259,7 @@ class BGGCanvas {
          * DEPRECATED
          */
 
-        /*if (this.config.canvas.writeUsername) {
+        if (this.config.canvas.writeUsername) {
             // Write "Awesome!"
             const distance = 25;
             const textHeight = 20;
@@ -272,7 +272,7 @@ class BGGCanvas {
             const text = ctx.measureText('Awesome!')
             ctx.fillText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
             ctx.strokeText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
-        }*/
+        }
 
         this.l('Writing the resulting image');
         const buffer = await canvas.toBuffer("image/png");
