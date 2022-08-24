@@ -46,9 +46,16 @@
       }
     },
     {
-      "name": "top_priority",
+      "name": "owned_not_played",
       "query": {
-        "wishlistpriority": 5
+        "own": 1,
+        "played": 0
+      }
+    },
+    {
+      "name": "my_top_rated",
+      "query": {
+        "minrating": 8
       }
     }
   ],

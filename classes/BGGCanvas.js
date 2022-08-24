@@ -261,18 +261,20 @@ class BGGCanvas {
          */
 
         if (this.config.canvas.writeUsername) {
+            this.l('Writting username');
             // Write "Awesome!"
-            const distance = 25;
-            const textHeight = 20;
+            const textHeight = this.config.canvas.h / 12;
+            const distance = textHeight + (textHeight/10) ;
+
+            this.l(this.config.username);
             const usernameToUser = this.config.username;
             ctx.strokeStyle = 'black';
-            ctx.font = textHeight + 'px Calibri white';
+            ctx.font = textHeight + 'px Arial white';
 
             ctx.fillText(usernameToUser, distance, distance);
-            ctx.strokeText(usernameToUser, distance, distance);
-            const text = ctx.measureText('Awesome!')
-            ctx.fillText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
-            ctx.strokeText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
+            ctx.strokeText(usernameToUser, distance-2, distance +2);
+            // ctx.fillText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
+            // ctx.strokeText(usernameToUser, fullW - distance - text.width - 2, fullH - distance - textHeight -2);
         }
 
         this.l('Writing the resulting image');
