@@ -34,10 +34,14 @@ class BGGCanvas {
         this.l(' > ' + uri);
         this.l(' > ' + filename);
         this.s();
-        const response = await fetch(uri);
-        const buffer = await response.buffer();
-        await fs.writeFile(this.config.images.temporal_folder + filename, buffer);
-
+        if (await !fs.exists(this.config.images.temporal_folder + filename)) {
+            this.l('File does not exist on local. Downloading it');
+            const response = await fetch(uri);
+            const buffer = await response.buffer();
+            await fs.writeFile(this.config.images.temporal_folder + filename, buffer);
+        } else {
+            this.l('File already exists. Using the local one');
+        }
     }
 
 
@@ -50,6 +54,8 @@ class BGGCanvas {
         for (let i = 0; i < items.length; i++) {
             this.l('[IMAGE ' + i + ']');
             const builtName = items[i][this.config.images.images_name] + '.' + this.config.images.images_extension;
+
+
             await this.download(items[i][this.config.images.images_attribute], builtName);
             arrayWithItems.push(builtName);
         }
@@ -69,22 +75,22 @@ class BGGCanvas {
 
         let listOfFilters = null;
 
-        if( typeof this.config.filters === 'object' && this.config.filters.length > 0 ){
+        if (typeof this.config.filters === 'object' && this.config.filters.length > 0) {
             // It is an array
             listOfFilters = this.config.filters;
-        }else if( typeof this.config.filters === 'object' ){
+        } else if (typeof this.config.filters === 'object') {
             listOfFilters = [];
             listOfFilters.push({
                 name: 'general',
                 query: this.config.filters
             })
-        }else{
+        } else {
             listOfFilters = [];
 
         }
 
 
-        for(let i= 0; i < listOfFilters.length; i++){
+        for (let i = 0; i < listOfFilters.length; i++) {
             const currentFilterName = listOfFilters[i].name;
             const currentFilterQuery = listOfFilters[i].query;
 
@@ -128,7 +134,7 @@ class BGGCanvas {
      * This is the meat of this code
      * TESTING MODE
      */
-    async createCanvasProcess(items, type='general') {
+    async createCanvasProcess(items, type = 'general') {
 
         this.l('Creating the canvas for the collage');
         const {createCanvas, loadImage} = require('canvas');
