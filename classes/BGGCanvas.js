@@ -34,7 +34,8 @@ class BGGCanvas {
         this.l(' > ' + uri);
         this.l(' > ' + filename);
         this.s();
-        if (await !fs.exists(this.config.images.temporal_folder + filename)) {
+        const exists = await fs.exists(this.config.images.temporal_folder + filename);
+        if (!exists) {
             this.l('File does not exist on local. Downloading it');
             const response = await fetch(uri);
             const buffer = await response.buffer();
