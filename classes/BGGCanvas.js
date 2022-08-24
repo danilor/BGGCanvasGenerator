@@ -102,26 +102,27 @@ class BGGCanvas {
 
             const items = results.data.item;
 
-            this.l('BGG Results for query');
-            this.l(currentFilterQuery);
-            this.l('Total items: ' + items.length);
-            this.s();
+            if (typeof items !== 'undefined') {
+                this.l('BGG Results for query');
+                this.l(currentFilterQuery);
+                this.l('Total items: ' + items.length);
+                this.s();
 
-            /**
-             * We write a temp file with the user information
-             */
-            await fs.writeFile(this.config.collections + this.config.username + this.filenameSeparator + currentFilterName + '.json', JSON.stringify(items));
+                /**
+                 * We write a temp file with the user information
+                 */
+                await fs.writeFile(this.config.collections + this.config.username + this.filenameSeparator + currentFilterName + '.json', JSON.stringify(items));
 
-            /**
-             * Now that we have the collection, we need to save all the images in the temp folder using the ID
-             * of the board game.
-             * It will return the array with images that we can use to save our canvas
-             */
+                /**
+                 * Now that we have the collection, we need to save all the images in the temp folder using the ID
+                 * of the board game.
+                 * It will return the array with images that we can use to save our canvas
+                 */
 
-            const arrayWithItems = await this.saveImages(items);
+                const arrayWithItems = await this.saveImages(items);
 
-            await this.createCanvasProcess(arrayWithItems, currentFilterName);
-
+                await this.createCanvasProcess(arrayWithItems, currentFilterName);
+            }
         }
 
 
