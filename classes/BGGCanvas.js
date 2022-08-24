@@ -19,6 +19,9 @@ const Ut = require('../utilities/Util');
 
 class BGGCanvas {
 
+    resultingURL = '';
+    filenameSeparator = '_';
+
     /**
      * Constructor
      */
@@ -64,32 +67,58 @@ class BGGCanvas {
          */
         const bggClient = require('bgg-xml-api-client');
 
-        const results = await bggClient.getBggCollection({
-            ...this.config.filters,
-            username: this.config.username
-        });
+        let listOfFilters = null;
 
-        const items = results.data.item;
+        if( typeof this.config.filters === 'object' && this.config.filters.length > 0 ){
+            // It is an array
+            listOfFilters = this.config.filters;
+        }else if( typeof this.config.filters === 'object' ){
+            listOfFilters = [];
+            listOfFilters.push({
+                name: 'general',
+                query: this.config.filters
+            })
+        }else{
+            listOfFilters = [];
 
-        this.l('BGG Results');
-        this.l('Total items: ' + items.length);
-        this.s();
+        }
 
-        /**
-         * We write a temp file with the user information
-         */
-        await fs.writeFile(this.config.collections + this.config.username + '.json', JSON.stringify(items));
 
-        /**
-         * Now that we have the collection, we need to save all the images in the temp folder using the ID
-         * of the board game.
-         * It will return the array with images that we can use to save our canvas
-         */
+        for(let i= 0; i < listOfFilters.length; i++){
+            const currentFilterName = listOfFilters[i].name;
+            const currentFilterQuery = listOfFilters[i].query;
 
-        const arrayWithItems = await this.saveImages(items);
+            const results = await bggClient.getBggCollection({
+                ...currentFilterQuery,
+                username: this.config.username
+            });
 
-        await this.createCanvasProcess(arrayWithItems);
+            const items = results.data.item;
 
+            this.l('BGG Results for query');
+            this.l(currentFilterQuery);
+            this.l('Total items: ' + items.length);
+            this.s();
+
+            /**
+             * We write a temp file with the user information
+             */
+            await fs.writeFile(this.config.collections + this.config.username + this.filenameSeparator + currentFilterName + '.json', JSON.stringify(items));
+
+            /**
+             * Now that we have the collection, we need to save all the images in the temp folder using the ID
+             * of the board game.
+             * It will return the array with images that we can use to save our canvas
+             */
+
+            const arrayWithItems = await this.saveImages(items);
+
+            await this.createCanvasProcess(arrayWithItems, currentFilterName);
+
+        }
+
+
+        return this.resultingURL;
 
     }
 
@@ -99,7 +128,7 @@ class BGGCanvas {
      * This is the meat of this code
      * TESTING MODE
      */
-    async createCanvasProcess(items) {
+    async createCanvasProcess(items, type='general') {
 
         this.l('Creating the canvas for the collage');
         const {createCanvas, loadImage} = require('canvas');
@@ -239,16 +268,19 @@ class BGGCanvas {
 
         this.l('Writing the resulting image');
         const buffer = await canvas.toBuffer("image/png");
-        const fileDesination = this.config.canvas.destination + this.config.username + ".png";
+        const fileDesination = this.config.canvas.destination + this.config.username + this.filenameSeparator + type + ".png";
         await fs.writeFileSync(fileDesination, buffer);
 
         /**
          * If the open result option is true, then we open the resulting image
+         * DEPRECATED
          */
-        if (this.config.openResult === true) {
-            const open = require('open');
-            await open(fileDesination);
-        }
+        // if (this.config.openResult === true) {
+        //     const open = require('open');
+        //     await open(fileDesination);
+        // }
+        this.resultingURL = fileDesination;
+        return fileDesination;
     }
 
 

@@ -40,10 +40,10 @@ function showBanner() {
  */
 async function main() {
     await showBanner();
-    const BGGCanvas = require('./classes/BGGCanvas');
-    console.log(BGGCanvas);
-    const BGG =  new BGGCanvas.BGGCanvas(config);
-    await BGG.getCollection();
+    const BGGCanvasClass = require('./classes/BGGCanvas');
+    const BGG =  new BGGCanvasClass.BGGCanvas(config);
+    const url = await BGG.getCollection();
+    Console.log('Process finished. The resulted URL for the generated image is: ' + url);
 }
 
 
