@@ -42,7 +42,7 @@ async function main() {
     
     const BGGCanvasClass = require('./classes/BGGCanvas');
 	// const users = ['arkofdan','mmolinam','crisguso93','Samhain_11','mesenius'];
-	const users = ['arkofdan'];
+	const users = config.users;
 	for( let i = 0; i < users.length; i++ ){
 		config.username = users[i];
 		await showBanner();
