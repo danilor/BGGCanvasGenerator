@@ -185,7 +185,7 @@ class BGGCanvas {
 
                 let auxCanvas = null;
                 /**
-                 * If crop square is true, instead of streaching the images
+                 * If crop square is true, instead of stretching the images
                  * we need to crop them down
                  */
                 if (this.config.canvas.cropSquare === true) {
@@ -264,7 +264,7 @@ class BGGCanvas {
             this.l('Writting username');
             // Write "Awesome!"
             const textHeight = this.config.canvas.h / 12;
-            const distance = textHeight + (textHeight/10) ;
+            const distance = textHeight + (textHeight / 10);
 
             this.l(this.config.username);
             const usernameToUser = this.config.username;
@@ -272,14 +272,17 @@ class BGGCanvas {
             ctx.font = textHeight + 'px Arial white';
 
             ctx.fillText(usernameToUser, distance, distance);
-            ctx.strokeText(usernameToUser, distance-2, distance +2);
+            ctx.strokeText(usernameToUser, distance - 2, distance + 2);
             // ctx.fillText(usernameToUser, fullW - distance - text.width, fullH - distance - textHeight);
             // ctx.strokeText(usernameToUser, fullW - distance - text.width - 2, fullH - distance - textHeight -2);
         }
 
-        this.l('Writing the resulting image');
-        const buffer = await canvas.toBuffer("image/png");
         const fileDesination = this.config.canvas.destination + this.config.username + this.filenameSeparator + type + ".png";
+        this.l('Writing the resulting image');
+        this.l(fileDesination);
+        const buffer = await canvas.toBuffer("image/png");
+
+
         await fs.writeFileSync(fileDesination, buffer);
 
         /**

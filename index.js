@@ -39,11 +39,19 @@ function showBanner() {
  * Main function
  */
 async function main() {
-    await showBanner();
+    
     const BGGCanvasClass = require('./classes/BGGCanvas');
+	// const users = ['arkofdan','mmolinam','crisguso93','Samhain_11','mesenius'];
+	const users = ['arkofdan'];
+	for( let i = 0; i < users.length; i++ ){
+		config.username = users[i];
+		await showBanner();
+		const BGG =  new BGGCanvasClass.BGGCanvas(config);
+		const url = await BGG.getCollection();
+	}
     const BGG =  new BGGCanvasClass.BGGCanvas(config);
     const url = await BGG.getCollection();
-    Console.log('Process finished. The resulted URL for the generated image is: ' + url);
+    
 }
 
 

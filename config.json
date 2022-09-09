@@ -1,5 +1,5 @@
 {
-  "username": "ARKOFDAN",
+  "username": "arkofdan",
   "collections": "collections/",
   "temp": "temp/",
   "images": {
@@ -56,6 +56,36 @@
       "name": "my_top_rated",
       "query": {
         "minrating": 8
+      }
+    },
+    {
+      "name": "must_have",
+      "query": {
+        "wishlistpriority": 1
+      }
+    },
+    {
+      "name": "love_to_have",
+      "query": {
+        "wishlistpriority": 2
+      }
+    },
+    {
+      "name": "like_to_have",
+      "query": {
+        "wishlistpriority": 3
+      }
+    },
+    {
+      "name": "thinking_to_have",
+      "query": {
+        "wishlistpriority": 4
+      }
+    },
+    {
+      "name": "want_to_play",
+      "query": {
+        "wanttoplay": 1
       }
     }
   ],
