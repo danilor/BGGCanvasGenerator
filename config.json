@@ -11,89 +11,16 @@
   },
   "filters": [
     {
-      "name": "comment",
-      "query": {
-        "comment": 1
-      }
-    },
-    {
-      "name": "preordered",
-      "query": {
-        "preordered": 1
-      }
-    },
-    {
       "name": "own",
       "query": {
         "own": 1
-      }
-    },
-    {
-      "name": "wishlist",
-      "query": {
-        "wishlist": 1
-      }
-    },
-    {
-      "name": "played",
-      "query": {
-        "played": 1
-      }
-    },
-    {
-      "name": "rated",
-      "query": {
-        "rated": 1
-      }
-    },
-    {
-      "name": "owned_not_played",
-      "query": {
-        "own": 1,
-        "played": 0
-      }
-    },
-    {
-      "name": "my_top_rated",
-      "query": {
-        "minrating": 8
-      }
-    },
-    {
-      "name": "must_have",
-      "query": {
-        "wishlistpriority": 1
-      }
-    },
-    {
-      "name": "love_to_have",
-      "query": {
-        "wishlistpriority": 2
-      }
-    },
-    {
-      "name": "like_to_have",
-      "query": {
-        "wishlistpriority": 3
-      }
-    },
-    {
-      "name": "thinking_to_have",
-      "query": {
-        "wishlistpriority": 4
-      }
-    },
-    {
-      "name": "want_to_play",
-      "query": {
-        "wanttoplay": 1
       }
     }
   ],
   "canvas": {
     "writeUsername": true,
-    "w": 100,
-    "h": 100,
+    "w": 250,
+    "h": 250,
     "backgroundColor": "black",
     "destination": "result/",
     "cropSquare": false,

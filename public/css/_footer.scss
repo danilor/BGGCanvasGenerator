@@ -1,0 +1,23 @@
+$footerSize: 30px;
+
+footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  min-height: $footerSize;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .content{
+    width: 100%;
+    text-align: center;
+    a, a:hover, a:visited{
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+}

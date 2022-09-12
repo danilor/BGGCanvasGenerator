@@ -20,6 +20,7 @@ const Ut = require('../utilities/Util');
 class BGGCanvas {
 
     resultingURL = '';
+    resultingCode = [];
     filenameSeparator = '_';
 
     /**
@@ -67,7 +68,7 @@ class BGGCanvas {
     /**
      * This will read the whole collection defined in the config.json file.
      */
-    async getCollection() {
+    async getCollection(save_file=false) {
         this.l('Getting collection information');
         /**
          * Client got from https://www.npmjs.com/package/bgg-xml-api-client
@@ -92,6 +93,8 @@ class BGGCanvas {
 
 
         for (let i = 0; i < listOfFilters.length; i++) {
+            Console.log('Getting filter');
+            Console.log(listOfFilters[i].query);
             const currentFilterName = listOfFilters[i].name;
             const currentFilterQuery = listOfFilters[i].query;
 
@@ -101,6 +104,13 @@ class BGGCanvas {
             });
 
             const items = results.data.item;
+
+            Console.log('Results');
+            Console.log(items);
+
+            if (typeof items === 'undefined') {
+                return false;
+            }
 
             if (typeof items !== 'undefined') {
                 this.l('BGG Results for query');
@@ -121,12 +131,16 @@ class BGGCanvas {
 
                 const arrayWithItems = await this.saveImages(items);
 
-                await this.createCanvasProcess(arrayWithItems, currentFilterName);
+                const code = await this.createCanvasProcess(arrayWithItems, currentFilterName, save_file);
+                this.resultingCode.push({
+                    query: currentFilterQuery,
+                    dataUrl: code
+                });
             }
         }
 
 
-        return this.resultingURL;
+        return this.resultingCode;
 
     }
 
@@ -136,7 +150,7 @@ class BGGCanvas {
      * This is the meat of this code
      * TESTING MODE
      */
-    async createCanvasProcess(items, type = 'general') {
+    async createCanvasProcess(items, type = 'general', save_file = false) {
 
         this.l('Creating the canvas for the collage');
         const {createCanvas, loadImage} = require('canvas');
@@ -277,13 +291,20 @@ class BGGCanvas {
             // ctx.strokeText(usernameToUser, fullW - distance - text.width - 2, fullH - distance - textHeight -2);
         }
 
-        const fileDesination = this.config.canvas.destination + this.config.username + this.filenameSeparator + type + ".png";
-        this.l('Writing the resulting image');
-        this.l(fileDesination);
-        const buffer = await canvas.toBuffer("image/png");
+        if(save_file){
+            const fileDesination = this.config.canvas.destination + this.config.username + this.filenameSeparator + type + ".png";
+            this.l('Writing the resulting image');
+            this.l(fileDesination);
+            const buffer = await canvas.toBuffer("image/png");
+            await fs.writeFileSync(fileDesination, buffer);
+        }
 
 
-        await fs.writeFileSync(fileDesination, buffer);
+        const code = await canvas.toDataURL("image/png");
+
+        /*
+
+        */
 
         /**
          * If the open result option is true, then we open the resulting image
@@ -293,8 +314,8 @@ class BGGCanvas {
         //     const open = require('open');
         //     await open(fileDesination);
         // }
-        this.resultingURL = fileDesination;
-        return fileDesination;
+        // this.resultingURL = fileDesination;
+        return code;
     }
 
 

@@ -16,3 +16,7 @@ Danilo Ramirez
 ## Version
 
 1.0
+
+## Backup
+
+"node": "^16.10.0",
