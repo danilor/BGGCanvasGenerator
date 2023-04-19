@@ -47,11 +47,12 @@ async function main() {
         config.username = users[i];
         await showBanner();
         const BGG =  new BGGCanvasClass.BGGCanvas(config);
-        const url = await BGG.getCollection();
+        const url = await BGG.getCollection(true);
     }
-    const BGG =  new BGGCanvasClass.BGGCanvas(config);
-    const url = await BGG.getCollection();
-
+    /**
+		const BGG =  new BGGCanvasClass.BGGCanvas(config);
+		const url = await BGG.getCollection(true);
+	**/
 }
 
 

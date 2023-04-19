@@ -259,7 +259,8 @@ class BGGCanvas {
                 }
                 const posX = cols * this.config.canvas.w;
                 const posY = rows * this.config.canvas.h;
-                await ctx.drawImage(
+				this.l('Generating canvas');
+                const resultDrawing = await ctx.drawImage(
                     auxCanvas,
                     posX, posY,
                     this.config.canvas.w, this.config.canvas.h
