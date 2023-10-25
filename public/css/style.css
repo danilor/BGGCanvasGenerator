@@ -796,7 +796,6 @@ legend {
   .choices__list--dropdown .choices__item--selectable {
     padding-right: 100px;
   }
-
   .choices__list--dropdown .choices__item--selectable:after {
     content: attr(data-select-text);
     font-size: 12px;
@@ -806,13 +805,11 @@ legend {
     top: 50%;
     transform: translateY(-50%);
   }
-
   [dir=rtl] .choices__list--dropdown .choices__item--selectable {
     text-align: right;
     padding-left: 100px;
     padding-right: 10px;
   }
-
   [dir=rtl] .choices__list--dropdown .choices__item--selectable:after {
     right: auto;
     left: 10px;
@@ -1141,6 +1138,19 @@ select:-webkit-autofill:focus {
   padding: 20px;
   text-align: center;
   color: white;
+}
+
+#games_space {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 5px;
+  grid-auto-columns: 1fr;
+}
+#games_space .single_game {
+  object-fit: cover;
+  aspect-ratio: 1;
+  width: 100%;
 }
 
 /*# sourceMappingURL=style.css.map */

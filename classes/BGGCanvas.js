@@ -146,6 +146,87 @@ class BGGCanvas {
 
 
     /**
+     * This will read the whole collection defined in the config.json file.
+     */
+    async getSingleCollection(username) {
+        this.l('Getting collection information');
+        /**
+         * Client got from https://www.npmjs.com/package/bgg-xml-api-client
+         */
+        const bggClient = require('bgg-xml-api-client');
+
+        let listOfFilters = null;
+
+        if (typeof this.config.filters === 'object' && this.config.filters.length > 0) {
+            // It is an array
+            listOfFilters = this.config.filters;
+        } else if (typeof this.config.filters === 'object') {
+            listOfFilters = [];
+            listOfFilters.push({
+                name: 'general',
+                query: this.config.filters
+            })
+        } else {
+            listOfFilters = [];
+
+        }
+
+
+        for (let i = 0; i < listOfFilters.length; i++) {
+            Console.log('Getting filter');
+            Console.log(listOfFilters[i].query);
+            const currentFilterName = listOfFilters[i].name;
+            const currentFilterQuery = listOfFilters[i].query;
+
+            const results = await bggClient.getBggCollection({
+                ...currentFilterQuery,
+                username: this.config.username
+            });
+
+            const items = results.data.item;
+
+            Console.log('Results');
+            Console.log(items);
+
+            if (typeof items === 'undefined') {
+                return false;
+            }
+
+            if (typeof items !== 'undefined') {
+                this.l('BGG Results for query');
+                this.l(currentFilterQuery);
+                this.l('Total items: ' + items.length);
+                this.s();
+
+                /**
+                 * We write a temp file with the user information
+                 */
+                await fs.writeFile(this.config.collections + this.config.username + this.filenameSeparator + currentFilterName + '.json', JSON.stringify(items));
+
+                /**
+                 * Now that we have the collection, we need to save all the images in the temp folder using the ID
+                 * of the board game.
+                 * It will return the array with images that we can use to save our canvas
+                 */
+
+                const arrayWithItems = await this.saveImages(items);
+
+                const code = await this.createCanvasProcess(arrayWithItems, currentFilterName, save_file);
+                this.resultingCode.push({
+                    query: currentFilterQuery,
+                    dataUrl: code
+                });
+            }
+        }
+
+
+        return this.resultingCode;
+
+    }
+
+
+
+    /**
      * This method will create the canvas.
      * This is the meat of this code
      * TESTING MODE

@@ -1043,7 +1043,8 @@ select:-webkit-autofill:focus {
     background-color: black;
     padding: 20px;
     text-align: center;
-    img{
+
+    img {
       max-width: 100%;
       max-height: 100%;
     }
@@ -1052,13 +1053,14 @@ select:-webkit-autofill:focus {
 }
 
 
-#result_error{
+#result_error {
   width: 100vw;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
   display: none;
+
   &.open {
     display: flex;
     justify-content: center;
@@ -1072,5 +1074,19 @@ select:-webkit-autofill:focus {
     padding: 20px;
     text-align: center;
     color: white;
+  }
+}
+
+
+#games_space {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 5px;
+  grid-auto-columns: 1fr;
+  .single_game {
+    object-fit: cover;
+    aspect-ratio: 1;
+    width: 100%;
   }
 }
